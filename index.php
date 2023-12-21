@@ -17,23 +17,23 @@
             font-family: Arial, sans-serif;
         }
 
-#bannerHeader {
-    width: 100%;
-    height: 350px;
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    overflow: hidden;
-}
+		#bannerHeader {
+			width: 100%;
+			height: 350px;
+			display: flex; 
+			align-items: center; 
+			justify-content: center; 
+			overflow: hidden;
+		}
 
-.banner-image {
-    width: 1024px; 
-    height: 350px;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-}
+		.banner-image {
+			width: 1024px; 
+			height: 350px;
+			background-size: cover;
+			background-position: center;
+			opacity: 0;
+			transition: opacity 2s ease-in-out;
+		}
 
         .banner-image.active {
             opacity: 1;
@@ -78,76 +78,60 @@
 <body>
 
 <header id="bannerHeader">
-    <!-- Dynamically add image containers here -->
+   
 </header>
 
 <div class="search-form">
-    <form action="index-gl.php" method="get">
+    <form action="index.php" method="get">
         <input type="text" name="search" placeholder="Search...">
-        <select name="artist">
-            <option value="">Artists</option>
-            <?php
-            $dir = "content_gl/"; // Path to the image directory
-            $artists = [];
-            $categories = glob($dir . '*', GLOB_ONLYDIR);
-            foreach ($categories as $category) {
-                $categoryName = basename($category);
-                $parts = explode('-', $categoryName);
-                $artistName = $parts[0];
-                if (!in_array($artistName, $artists)) {
-                    $artists[] = $artistName;
-                    echo "<option value=\"$artistName\">$artistName</option>";
-                }
-            }
-            ?>
-        </select>
-        <button type="submit">Filter</button>
+        <button type="submit">Search</button>
     </form>
 </div>
 
 <div class="gallery">
-    <?php
-    $dir = "content_gl/"; // Image directory
 
-    if (isset($_GET['search']) && $_GET['search'] != '') {
-        $search_term = strtolower($_GET['search']);
-        $found_files = [];
-        foreach ($categories as $category) {
-            $files = glob($category . '/*.{jpg,jpeg,png}', GLOB_BRACE);
-            foreach ($files as $file) {
-                if (strpos(strtolower($file), $search_term) !== false) {
-                    $found_files[] = $file;
-                }
+<?php
+$dir = "content_gl/"; 
+
+if (isset($_GET['search']) && $_GET['search'] != '') {
+    $search_term = strtolower($_GET['search']);
+    $found_files = [];
+
+    
+    $categories = glob($dir . '*', GLOB_ONLYDIR);
+    foreach ($categories as $category) {
+        $files = glob($category . '/*.{jpg,jpeg,png}', GLOB_BRACE);
+        foreach ($files as $file) {
+            if (strpos(strtolower($file), $search_term) !== false) {
+                $found_files[] = $file;
             }
         }
-        foreach ($found_files as $file) {
-            $category_name = basename(dirname($file));
+    }
+
+    
+    foreach ($found_files as $file) {
+        $category_name = basename(dirname($file));
+        echo '<div class="category">';
+        echo '<a href="' . $file . '" data-lightbox="gallery" data-title="' . $category_name . '">';
+        echo '<img src="' . $file . '" alt="' . $category_name . '" />';
+        echo '</a>';
+        echo '<div class="label">' . $category_name . '</div>';
+        echo '</div>';
+    }
+    } elseif (isset($_GET['category'])) {
+        $category = basename($_GET['category']);
+        echo '<a href="index.php">Back to Home</a>';
+        $files = glob($dir . $category . '/*.{jpg,jpeg,png}', GLOB_BRACE);
+        foreach ($files as $file) {
             echo '<div class="category">';
-            echo '<a href="' . $file . '" data-lightbox="gallery" data-title="' . $category_name . '">';
-            echo '<img src="' . $file . '" alt="' . $category_name . '" />';
+            echo '<a href="' . $file . '" data-lightbox="gallery" data-title="' . $category . '">';
+            echo '<img src="' . $file . '" alt="' . $category . '" />';
             echo '</a>';
-            echo '<div class="label">' . $category_name . '</div>';
+            echo '<div class="label">' . $category . '</div>';
             echo '</div>';
         }
-    } elseif (isset($_GET['artist']) && $_GET['artist'] != '') {
-        $selected_artist = $_GET['artist'];
-        foreach ($categories as $category) {
-            $categoryName = basename($category);
-            $parts = explode('-', $categoryName);
-            $artistName = $parts[0];
-            if ($artistName === $selected_artist) {
-                $files = glob($category . '/*.{jpg,jpeg,png}', GLOB_BRACE);
-                foreach ($files as $file) {
-                    echo '<div class="category">';
-                    echo '<a href="' . $file . '" data-lightbox="gallery" data-title="' . $categoryName . '">';
-                    echo '<img src="' . $file . '" alt="' . $categoryName . '" />';
-                    echo '</a>';
-                    echo '<div class="label">' . $categoryName . '</div>';
-                    echo '</div>';
-                }
-            }
-        }
     } else {
+        $categories = glob($dir . '*', GLOB_ONLYDIR);
         foreach ($categories as $category) {
             $files = glob($category . '/*.{jpg,jpeg,png}', GLOB_BRACE);
             if (count($files) > 0) {
@@ -162,14 +146,13 @@
             }
         }
     }
-    ?>
+?>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js"></script>
 
 <script>
-// JavaScript for Banner Slider
-const bannerImages = ["./images/banner1.jpg", "./images/banner2.jpg", "./images/banner3.jpg", "./images/banner4.jpg", "./images/banner5.jpg", "./images/banner6.jpg", "./images/banner7.jpg", "./images/banner8.jpg", "./images/banner9.jpg", "./images/banner10.jpg"]; // Ihre Bildpfade
+const bannerImages = ["./images/banner1.png", "./images/banner2.png", "./images/banner3.png", "./images/banner4.png", "./images/banner5.png", "./images/banner6.png", "./images/banner7.png", "./images/banner8.png", "./images/banner9.png", "./images/banner10.png"]; 
 let currentImageIndex = 0;
 
 function createImageElement(src) {
@@ -184,7 +167,9 @@ function updateBannerImage() {
     const images = header.getElementsByClassName('banner-image');
     const newActiveIndex = (currentImageIndex + 1) % bannerImages.length;
 
+    
     images[newActiveIndex].classList.add('active');
+    
     
     if (images[currentImageIndex]) {
         images[currentImageIndex].classList.remove('active');
@@ -192,6 +177,7 @@ function updateBannerImage() {
 
     currentImageIndex = newActiveIndex;
 }
+
 
 window.onload = () => {
     const header = document.getElementById('bannerHeader');
