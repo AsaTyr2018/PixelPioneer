@@ -4,6 +4,8 @@
 
 PixelPioneer is a user-friendly, stand-alone PHP script for creating an interactive and visually appealing online image gallery. It's designed to be simple and efficient, requiring no SQL or complex setup. Just upload the script and your images, and you're ready to go.
 
+Demo: https://test.lenz-host.de/PixPio/
+
 ### Features
 
 - **Artist-Centric Navigation**: Browse artworks by selecting an artist from a dropdown menu.
