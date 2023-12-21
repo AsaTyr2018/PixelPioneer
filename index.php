@@ -157,7 +157,7 @@
                 echo '<a href="' . $random_image . '" data-lightbox="gallery-' . $category_name . '" data-title="' . $category_name . '">';
                 echo '<img src="' . $random_image . '" alt="' . $category_name . '" />';
                 echo '</a>';
-                echo '<div class="label" onclick="window.location.href=\'index-gl.php?category=' . urlencode($category_name) . '\'">' . $category_name . '</div>';
+                echo '<div class="label" onclick="window.location.href=\'index.php?category=' . urlencode($category_name) . '\'">' . $category_name . '</div>';
                 echo '</div>';
             }
         }
